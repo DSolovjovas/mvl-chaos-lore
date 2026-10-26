@@ -1,0 +1,17 @@
+{
+  "dimensions_from_source_index": "Не записаны в исходном индексе",
+  "prompt": null,
+  "output": {
+    "sha256": "50ccf6581314883b7a6bcf928212ffb253f1b1c184fbc82fd66522bbc0eeb92b",
+    "path": "Персонажи/Miu/База/Референсы/MIU_original_reference.png"
+  },
+  "path_base": "project",
+  "input_images": null,
+  "source": {
+    "path": "references/MIU_original_reference.png",
+    "package": "Архив/Импорт 2026-10-09/Same_Girls_Different_Chaos_CHAT_HANDOFF_2026-10-09"
+  },
+  "record_type": "import",
+  "reproducible_call": false,
+  "generation_parameters": null
+}

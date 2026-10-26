@@ -1,0 +1,17 @@
+{
+  "dimensions_from_source_index": "Не записаны в исходном индексе",
+  "prompt": null,
+  "output": {
+    "sha256": "25d26761f5df287f100f2035130d13a2316bcb8b31f8705ed367d8963c8d32eb",
+    "path": "Персонажи/Bruno/База/Референсы/BRUNO_visual_reference.png"
+  },
+  "path_base": "project",
+  "input_images": null,
+  "source": {
+    "path": "references/BRUNO_visual_reference.png",
+    "package": "Архив/Импорт 2026-10-09/Same_Girls_Different_Chaos_CHAT_HANDOFF_2026-10-09"
+  },
+  "record_type": "import",
+  "reproducible_call": false,
+  "generation_parameters": null
+}

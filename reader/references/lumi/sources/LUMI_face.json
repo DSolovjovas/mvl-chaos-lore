@@ -1,0 +1,19 @@
+{
+  "generation_prompt": null,
+  "character": "Lumi",
+  "explicit_exceptions": "Уши только кошачьи: ровно два кремово-белых уха сверху головы. Человеческих ушей, дополнительных пар, ободка или креплений нет.",
+  "record_type": "user_supplied_identity_reference",
+  "date": "2026-10-16",
+  "output": {
+    "width": 1254,
+    "path": "База/Референсы/LUMI_face.png",
+    "sha256": "b43aa0eb8547b557e603ba7028bdec473e381c608fa49fa7f700e25b39a5c996",
+    "height": 1254
+  },
+  "note": "Imported without pixel changes. Original generation prompt and parameters were not provided.",
+  "role": "Mandatory primary reference for facial identity; not a fixed expression, pose, background or outfit",
+  "path_base": "character",
+  "generation_parameters": null,
+  "source_archive": "Архив/Импорт лиц 2026-10-16/mvl_chaos_character_faces.zip",
+  "source_entry": "LUMI_face.png"
+}
