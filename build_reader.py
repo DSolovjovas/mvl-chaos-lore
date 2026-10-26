@@ -61,7 +61,7 @@ def render(text, lore=False, speakers=None):
             in_list = False
         if lore and line.startswith('#'):
             continue
-        if lore and line.startswith('Непубличный взрослый лор.'):
+        if lore and line.startswith(('Непубличный взрослый лор.', 'Взрослый лор.')):
             blocks.append('<details class="content-note"><summary>О содержании · 18+</summary><p>' + inline(line) + '</p></details>')
             continue
         chapter = next((title for start, title in CHAPTERS.items() if lore and line.startswith(start)), None)
@@ -117,11 +117,11 @@ def page(title, subtitle, active, body, toc):
 <meta name="robots" content="noindex,nofollow"><meta name="color-scheme" content="dark light">
 <title>{html.escape(title)} · MVL CHAOS</title><link rel="stylesheet" href="assets/reader.css"><script src="assets/reader.js" defer></script></head>
 <body><a class="skip" href="#reading">К тексту</a><div class="progress" aria-hidden="true"></div>
-<header class="top"><a class="brand" href="index.html">MVL<span>CHAOS</span></a><nav aria-label="Разделы">{nav}</nav><span class="private">Личный архив · 18+</span></header>
+<header class="top"><a class="brand" href="index.html">MVL<span>CHAOS</span></a><nav aria-label="Разделы">{nav}</nav><span class="private">Лор и персонажи · 18+</span></header>
 <div class="layout"><aside><details class="contents" open><summary>Содержание</summary><div class="toc">{links or '<a href="#reading">Персонажи</a>'}</div></details>
 <div class="tools"><label for="search">Найти в тексте</label><input id="search" type="search" placeholder="Слово или фраза" autocomplete="off"><p id="search-status" role="status"></p><div id="results"></div><div class="settings"><button id="smaller" aria-label="Уменьшить текст">A−</button><button id="larger" aria-label="Увеличить текст">A+</button><button id="theme" aria-label="Сменить тему">Светлая тема</button></div></div>
 <div class="legend"><span class="miu">● Миу</span><span class="vexa">● Векса</span><span class="lumi">● Луми</span></div></aside>
-<main id="reading" tabindex="-1"><header class="title"><p class="eyebrow">SAME GIRLS. DIFFERENT CHAOS.</p><h1>{html.escape(title)}</h1><p class="subtitle">{html.escape(subtitle)}</p></header><article>{body}</article><footer>Same Girls. Different Chaos. <span>Внутренний авторский архив</span><a href="#reading">Наверх ↑</a></footer></main></div></body></html>'''
+<main id="reading" tabindex="-1"><header class="title"><p class="eyebrow">SAME GIRLS. DIFFERENT CHAOS.</p><h1>{html.escape(title)}</h1><p class="subtitle">{html.escape(subtitle)}</p></header><article>{body}</article><footer>Same Girls. Different Chaos. <span>Авторский мир и его истории</span><a href="#reading">Наверх ↑</a></footer></main></div></body></html>'''
 
 
 def build():
