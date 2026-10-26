@@ -1,0 +1,19 @@
+{
+  "generation_prompt": null,
+  "character": "Miu",
+  "explicit_exceptions": "Тёмные корни на портрете не отменяют уточнение пользователя: волосы Miu розовые от корней до кончиков. Уши только кошачьи: ровно два чёрных уха сверху головы, человеческих ушей нет.",
+  "record_type": "user_supplied_identity_reference",
+  "date": "2026-10-16",
+  "output": {
+    "width": 1254,
+    "path": "База/Референсы/MIU_face.png",
+    "sha256": "a727a4fcb9e1b3a604dccd4964bb1ab81a37dfd2023990eebcadb7007b8514ae",
+    "height": 1254
+  },
+  "note": "Imported without pixel changes. Original generation prompt and parameters were not provided.",
+  "role": "Mandatory primary reference for facial identity; not a fixed expression, pose, background or outfit",
+  "path_base": "character",
+  "generation_parameters": null,
+  "source_archive": "Архив/Импорт лиц 2026-10-16/mvl_chaos_character_faces.zip",
+  "source_entry": "MIU_face.png"
+}

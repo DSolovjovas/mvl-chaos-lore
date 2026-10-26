@@ -1,0 +1,19 @@
+{
+  "generation_prompt": null,
+  "character": "Bruno",
+  "explicit_exceptions": "Это обычный взрослый пёс; не переносить черты людей. Ошейник и один кулон-авокадо брать из основного образа. Открытый рот и высунутый язык на портрете не обязательны в каждой сцене.",
+  "record_type": "user_supplied_identity_reference",
+  "date": "2026-10-16",
+  "output": {
+    "width": 1254,
+    "path": "База/Референсы/BRUNO_face.png",
+    "sha256": "194a8ab443718346d714ab8cc623998071178fd8f8779371307fa4fd017a53ae",
+    "height": 1254
+  },
+  "note": "Imported without pixel changes. Original generation prompt and parameters were not provided.",
+  "role": "Mandatory primary reference for facial identity; not a fixed expression, pose, background or outfit",
+  "path_base": "character",
+  "generation_parameters": null,
+  "source_archive": "Архив/Импорт лиц 2026-10-16/mvl_chaos_character_faces.zip",
+  "source_entry": "BRUNO_face.png"
+}
