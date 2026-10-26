@@ -31,7 +31,13 @@ def write(path, text):
 
 
 def inline(text):
-    return re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', html.escape(text))
+    formatted = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', html.escape(text))
+    names = re.compile(r'\b(Миу|Луми|Бруно|Векс(?:а|ы|е|у|ой|ою))\b')
+    def colour_name(match):
+        name = match.group(0)
+        role = 'vexa' if name.startswith('Векс') else {'Миу': 'miu', 'Луми': 'lumi', 'Бруно': 'bruno'}[name]
+        return f'<span class="character-name {role}">{name}</span>'
+    return names.sub(colour_name, formatted)
 
 
 CHAPTERS = {
@@ -100,7 +106,15 @@ def render(text, lore=False, speakers=None):
                 in_list = True
             blocks.append('<li>' + inline(line[2:] if line.startswith('- ') else line) + '</li>')
         else:
-            kind = 'fact' if line.startswith('**Установлено') else 'meaning' if line.startswith('**Что ') else 'open' if line.startswith('**Пока неизвестно') else ''
+            kind = ''
+            if line.startswith('**'):
+                label = line.split('**', 2)[1].lower()
+                if any(word in label for word in ('неизвестно', 'открыто', 'предложение', 'возможное')):
+                    kind = 'open'
+                elif label.startswith('что ') or label.startswith('почему '):
+                    kind = 'meaning'
+                elif any(word in label for word in ('установлено', 'утверждено', 'рост по', 'рубцы', 'визуальные материалы')):
+                    kind = 'fact'
             blocks.append(f'<p class="{kind}">{inline(line)}</p>')
     if in_list:
         blocks.append('</ul>')
@@ -120,7 +134,7 @@ def page(title, subtitle, active, body, toc):
 <header class="top"><a class="brand" href="index.html">MVL<span>CHAOS</span></a><nav aria-label="Разделы">{nav}</nav><span class="private">Лор и персонажи · 18+</span></header>
 <div class="layout"><aside><details class="contents" open><summary>Содержание</summary><div class="toc">{links or '<a href="#reading">Персонажи</a>'}</div></details>
 <div class="tools"><label for="search">Найти в тексте</label><input id="search" type="search" placeholder="Слово или фраза" autocomplete="off"><p id="search-status" role="status"></p><div id="results"></div><div class="settings"><button id="smaller" aria-label="Уменьшить текст">A−</button><button id="larger" aria-label="Увеличить текст">A+</button><button id="theme" aria-label="Сменить тему">Светлая тема</button></div></div>
-<div class="legend"><span class="miu">● Миу</span><span class="vexa">● Векса</span><span class="lumi">● Луми</span></div></aside>
+<div class="legend"><span class="miu">● Миу</span><span class="vexa">● Векса</span><span class="lumi">● Луми</span><span class="bruno">● Бруно</span></div></aside>
 <main id="reading" tabindex="-1"><header class="title"><p class="eyebrow">SAME GIRLS. DIFFERENT CHAOS.</p><h1>{html.escape(title)}</h1><p class="subtitle">{html.escape(subtitle)}</p></header><article>{body}</article><footer>Same Girls. Different Chaos. <span>Авторский мир и его истории</span><a href="#reading">Наверх ↑</a></footer></main></div></body></html>'''
 
 
@@ -149,11 +163,11 @@ def build():
             reference_toc.append((ident, character['name']))
             images = []
             for image in character['images']:
-                label = 'Лицо / морда · главный источник сходства' if image['role'] == 'face' else 'Полный лист · анатомия и основной образ'
+                label = image.get('purpose', 'Хэллоуинский образ') if image['role'].startswith('halloween') else ('Лицо / морда · главный источник сходства' if image['role'] == 'face' else 'Полный лист · анатомия и основной образ')
                 path = html.escape(image['path'], quote=True)
                 images.append(f'<figure><a href="{path}" target="_blank" rel="noopener"><img src="{path}" alt="{html.escape(character["name"])} — {html.escape(label)}" loading="lazy"></a><figcaption>{html.escape(label)}<br><a href="{path}" target="_blank" rel="noopener">Открыть оригинал ↗</a></figcaption></figure>')
             rules = ''.join('<li>' + inline(rule) + '</li>' for rule in character['rules'])
-            cards.append(f'<section class="character {character["colour"]}"><h2 id="{ident}">{character["name"]}</h2><p class="profile-description">{inline(character["description"])}</p><div class="reference-images">{"".join(images)}</div><h3>Характер</h3><p>{inline(character["character"])}</p><h3>Мотив и роль в истории</h3><p>{inline(character["motive"])}</p><h3>Постоянные правила</h3><ul>{rules}</ul><div class="costume-note"><strong>Хэллоуинский образ</strong><p>{inline(character["halloween"])}</p></div></section>')
+            cards.append(f'<section class="character {character["colour"]}"><h2 id="{ident}">{inline(character["name"])}</h2><p class="profile-description">{inline(character["description"])}</p><div class="reference-images">{"".join(images)}</div><h3>Характер</h3><p>{inline(character["character"])}</p><h3>Мотив и роль в истории</h3><p>{inline(character["motive"])}</p><h3>Постоянные правила</h3><ul>{rules}</ul><div class="costume-note"><strong>Хэллоуинский образ</strong><p>{inline(character["halloween"])}</p></div></section>')
     rules_text = (ROOT / 'Правила референсов.md').read_text(encoding='utf-8') if (ROOT / 'Правила референсов.md').exists() else ''
     rules_body, _ = render(rules_text, False, speakers)
     reference_toc.append(('reference-rules', 'Общие правила'))

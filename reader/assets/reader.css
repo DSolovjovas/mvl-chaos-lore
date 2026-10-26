@@ -14,3 +14,11 @@
 .dialogue.lumi{background:color-mix(in srgb,var(--lumi) 8%,transparent)}
 .dialogue .speaker{font-size:11px;letter-spacing:1.6px}
 @media print{.dialogue{background:none!important}.dialogue.lumi{color:#185a93}}
+
+/* Character identities and clearly separated canon notes. */
+:root{--bruno:#f0ba69}.light{--bruno:#86500b}
+.bruno{color:var(--bruno)}.character-name{font-weight:650}.character.bruno>h2{color:var(--bruno)}
+.fact{border:1px solid color-mix(in srgb,var(--vexa) 35%,var(--line));border-left:4px solid var(--vexa);background:color-mix(in srgb,var(--vexa) 6%,var(--panel))}
+.fact>strong:first-child{color:var(--vexa)}.meaning{border-left:4px solid var(--gold)}.meaning>strong:first-child{color:var(--gold)}.open{border-left:4px dashed var(--miu)}.open>strong:first-child{color:var(--miu)}
+article strong{font-weight:750}article li strong{color:var(--gold)}
+@media print{.character-name.bruno{color:#86500b}.fact{background:none}.character-name.lumi{color:#185a93}}

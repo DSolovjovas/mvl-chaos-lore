@@ -11,6 +11,7 @@ def export():
     files += list((OUT / 'assets').glob('*.js'))
     profiles = json.loads((OUT / 'content' / 'characters.json').read_text(encoding='utf-8'))
     files += [OUT / image['path'] for character in profiles for image in character['images']]
+    files = list(dict.fromkeys(files))
     for source in files:
         target = destination / source.relative_to(OUT)
         if source.suffix == '.png':
