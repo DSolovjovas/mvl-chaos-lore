@@ -22,3 +22,7 @@
 .fact>strong:first-child{color:var(--vexa)}.meaning{border-left:4px solid var(--gold)}.meaning>strong:first-child{color:var(--gold)}.open{border-left:4px dashed var(--miu)}.open>strong:first-child{color:var(--miu)}
 article strong{font-weight:750}article li strong{color:var(--gold)}
 @media print{.character-name.bruno{color:#86500b}.fact{background:none}.character-name.lumi{color:#185a93}}
+
+/* Canon status stays distinct from character identity colours. */
+.fact{border:1px solid var(--line);border-left:4px solid var(--muted);background:var(--panel)}
+.fact>strong:first-child{color:var(--text)}
