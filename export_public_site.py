@@ -12,7 +12,7 @@ def export():
     files = [OUT / name for name in ('index.html', 'canon.html', 'references.html')]
     files += list((OUT / 'assets').glob('*.css'))
     files += list((OUT / 'assets').glob('*.js'))
-    files += list((OUT / 'illustrations').glob('*.png'))
+    files += list((OUT / 'illustrations').glob('*.jpg'))
     profiles = json.loads((OUT / 'content' / 'characters.json').read_text(encoding='utf-8'))
     files += [OUT / image['path'] for character in profiles for image in character['images'] if image.get('show_on_site', False)]
     files = list(dict.fromkeys(files))
@@ -36,7 +36,7 @@ def export():
             raise ValueError('Stale export backup verification failed.')
     for source in files:
         target = destination / source.relative_to(OUT)
-        if source.suffix == '.png':
+        if source.suffix.lower() in {'.png', '.jpg', '.jpeg'}:
             copy_exact(source, target)
         else:
             write(target, source.read_text(encoding='utf-8'))

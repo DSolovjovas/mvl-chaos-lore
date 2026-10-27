@@ -11,16 +11,16 @@ ROOT = Path(__file__).resolve().parent
 OUT = ROOT / 'reader'
 
 STORY_ILLUSTRATIONS = {
-    'bar-lumi-arrival.png': ROOT / 'Иллюстрации' / '01_Бар' / 'bar-lumi-arrival-v4-faces.png',
-    'mansion-exterior.png': ROOT / 'Иллюстрации' / '03_Особняк' / 'mansion-exterior-v1.png',
-    'guest-room.png': ROOT / 'Иллюстрации' / '04_Комната' / 'guest-room-v1.png',
-    'death-scars.png': ROOT / 'Иллюстрации' / '05_Рубцы' / 'scars-under-top-v8.png',
-    'first-morning.png': ROOT / 'Иллюстрации' / '06_Кухня' / 'first-morning-v3.png',
-    'flour-apology.png': ROOT / 'Иллюстрации' / '07_Мука' / 'flour-apology-v2.png',
-    'accident-aftermath.png': ROOT / 'Иллюстрации' / '08_Авария' / 'accident-aftermath-v4.png',
-    'driver-death.png': ROOT / 'Иллюстрации' / '09_Водитель' / 'driver-death-v4.png',
-    'first-meeting-bruno.png': ROOT / 'Иллюстрации' / '10_Переулок' / 'first-meeting-bruno-v1.png',
-    'camera-gift.png': ROOT / 'Иллюстрации' / '11_Фотоаппарат' / 'camera-gift-v1.png',
+    'bar-lumi-arrival.jpg': ROOT / 'Иллюстрации' / '01_Бар' / 'bar-lumi-arrival-v4-faces.jpg',
+    'mansion-exterior.jpg': ROOT / 'Иллюстрации' / '03_Особняк' / 'mansion-exterior-v1.jpg',
+    'guest-room.jpg': ROOT / 'Иллюстрации' / '04_Комната' / 'guest-room-v1.jpg',
+    'death-scars.jpg': ROOT / 'Иллюстрации' / '05_Рубцы' / 'scars-under-top-v8.jpg',
+    'first-morning.jpg': ROOT / 'Иллюстрации' / '06_Кухня' / 'first-morning-v3.jpg',
+    'flour-apology.jpg': ROOT / 'Иллюстрации' / '07_Мука' / 'flour-apology-v2.jpg',
+    'accident-aftermath.jpg': ROOT / 'Иллюстрации' / '08_Авария' / 'accident-aftermath-v4.jpg',
+    'driver-death.jpg': ROOT / 'Иллюстрации' / '09_Водитель' / 'driver-death-v4.jpg',
+    'first-meeting-bruno.jpg': ROOT / 'Иллюстрации' / '10_Переулок' / 'first-meeting-bruno-v1.jpg',
+    'camera-gift.jpg': ROOT / 'Иллюстрации' / '11_Фотоаппарат' / 'camera-gift-v1.jpg',
 }
 
 
@@ -92,7 +92,7 @@ def render(text, lore=False, speakers=None):
         if lore and line.startswith(('Непубличный взрослый лор.', 'Взрослый лор.')):
             blocks.append('<details class="content-note"><summary>О содержании · 18+</summary><p>' + inline(line) + '</p></details>')
             continue
-        image_match = re.fullmatch(r'!\[(.+?)\]\((illustrations/[a-z0-9-]+\.png)\)', line)
+        image_match = re.fullmatch(r'!\[(.+?)\]\((illustrations/[a-z0-9-]+\.(?:png|jpe?g))\)', line)
         if image_match:
             alt, path = image_match.groups()
             safe_alt = html.escape(alt, quote=True)
