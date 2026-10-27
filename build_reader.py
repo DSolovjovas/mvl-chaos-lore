@@ -15,6 +15,7 @@ STORY_ILLUSTRATIONS = {
     'mansion-exterior.png': ROOT / 'Иллюстрации' / '03_Особняк' / 'mansion-exterior-v1.png',
     'guest-room.png': ROOT / 'Иллюстрации' / '04_Комната' / 'guest-room-v1.png',
     'death-scars.png': ROOT / 'Иллюстрации' / '05_Рубцы' / 'scars-under-top-v8.png',
+    'first-morning.png': ROOT / 'Иллюстрации' / '06_Кухня' / 'first-morning-v3.png',
 }
 
 
