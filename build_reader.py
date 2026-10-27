@@ -2,12 +2,20 @@ from pathlib import Path
 import html
 import json
 import re
+import shutil
 import sys
 from datetime import datetime
 import hashlib
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / 'reader'
+
+STORY_ILLUSTRATIONS = {
+    'bar-lumi-arrival.png': ROOT / 'Иллюстрации' / '01_Бар' / 'bar-lumi-arrival-v4-faces.png',
+    'mansion-exterior.png': ROOT / 'Иллюстрации' / '03_Особняк' / 'mansion-exterior-v1.png',
+    'guest-room.png': ROOT / 'Иллюстрации' / '04_Комната' / 'guest-room-v1.png',
+    'death-scars.png': ROOT / 'Иллюстрации' / '05_Рубцы' / 'scars-under-top-v8.png',
+}
 
 
 def write(path, text):
@@ -28,6 +36,25 @@ def write(path, text):
             raise ValueError('Backup verification failed.')
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding='utf-8')
+
+
+def copy_binary(source, target):
+    source, target = source.resolve(), target.resolve()
+    if not source.is_relative_to(ROOT) or not target.is_relative_to(ROOT):
+        raise ValueError('Binary asset is outside the workspace.')
+    payload = source.read_bytes()
+    if target.exists() and target.read_bytes() == payload:
+        return
+    if target.exists():
+        backup = ROOT / 'Корзина' / target.relative_to(ROOT).parent / (target.stem + '_' + datetime.now().strftime('%Y-%m-%d_%H-%M-%S-%f') + target.suffix)
+        backup.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(target, backup)
+        if hashlib.sha256(backup.read_bytes()).digest() != hashlib.sha256(target.read_bytes()).digest():
+            raise ValueError('Binary backup verification failed.')
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, target)
+    if hashlib.sha256(target.read_bytes()).digest() != hashlib.sha256(payload).digest():
+        raise ValueError('Binary copy verification failed.')
 
 
 def inline(text):
@@ -58,6 +85,13 @@ def render(text, lore=False, speakers=None):
             continue
         if lore and line.startswith(('Непубличный взрослый лор.', 'Взрослый лор.')):
             blocks.append('<details class="content-note"><summary>О содержании · 18+</summary><p>' + inline(line) + '</p></details>')
+            continue
+        image_match = re.fullmatch(r'!\[(.+?)\]\((illustrations/[a-z0-9-]+\.png)\)', line)
+        if image_match:
+            alt, path = image_match.groups()
+            safe_alt = html.escape(alt, quote=True)
+            safe_path = html.escape(path, quote=True)
+            blocks.append(f'<figure class="story-illustration"><a href="{safe_path}" target="_blank" rel="noopener"><img src="{safe_path}" alt="{safe_alt}" loading="lazy"></a><figcaption>{safe_alt}</figcaption></figure>')
             continue
         if line.startswith('#'):
             level = min(len(line) - len(line.lstrip('#')), 4)
@@ -126,6 +160,8 @@ def build():
     canon = (ROOT / 'Канон и объяснения.md').read_text(encoding='utf-8')
     write(OUT / 'content' / 'lore.md', story)
     write(OUT / 'content' / 'canon.md', canon)
+    for filename, source in STORY_ILLUSTRATIONS.items():
+        copy_binary(source, OUT / 'illustrations' / filename)
     annotation = OUT / 'content' / 'dialogue.json'
     if not annotation.exists():
         roles = ['vexa','lumi','lumi','vexa','vexa','vexa','girls','vexa','girls','vexa','miu','vexa','miu','vexa','miu','vexa','miu','miu','vexa','miu','vexa','vexa','miu','vexa','miu','vexa','lumi','vexa','vexa','miu','vexa','lumi','vexa','vexa','lumi','miu']
