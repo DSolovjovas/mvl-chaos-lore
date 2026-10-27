@@ -1,6 +1,16 @@
 (() => {
   const body = document.body;
   const theme = document.querySelector('#theme');
+  const narrowScreen = matchMedia('(max-width: 720px)');
+  const panels = [...document.querySelectorAll('.contents, .reading-options')];
+  function updatePanels() { panels.forEach(panel => { panel.open = !narrowScreen.matches; }); }
+  updatePanels();
+  narrowScreen.addEventListener('change', updatePanels);
+  document.querySelector('aside').addEventListener('click', event => {
+    if (narrowScreen.matches && event.target.closest('a[href^="#"]')) {
+      panels.forEach(panel => { panel.open = false; });
+    }
+  });
   let size = 19;
   try {
     size = Math.max(16, Math.min(26, Number(localStorage.getItem('mvl-text-size')) || 19));

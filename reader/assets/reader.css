@@ -26,3 +26,30 @@ article strong{font-weight:750}article li strong{color:var(--gold)}
 /* Canon status stays distinct from character identity colours. */
 .fact{border:1px solid var(--line);border-left:4px solid var(--muted);background:var(--panel)}
 .fact>strong:first-child{color:var(--text)}
+
+/* Reading controls stay compact on phones and work without JavaScript. */
+.reading-options{margin-top:24px}.reading-options>summary{font:12px/1.5 Segoe UI,Arial,sans-serif;color:var(--gold);cursor:pointer;min-height:44px;display:list-item;padding:12px 0}
+.reading-options .tools{margin-top:0;padding-top:12px;border-top:0}
+article{overflow-wrap:anywhere}article p{hyphens:auto}
+@media(max-width:720px){
+ html{scroll-padding-top:20px}
+ .top{padding:12px 18px;gap:4px}.top nav{gap:12px;justify-content:space-between}.top nav a{display:flex;align-items:center;min-height:44px;padding:4px 2px}.top nav a[aria-current]{padding-bottom:4px}
+ .layout{padding:18px}.title{padding-bottom:24px;margin-bottom:24px}.title h1{font-size:clamp(32px,9vw,40px)}.eyebrow{letter-spacing:1.8px}
+ aside{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:26px;overflow:visible}
+ .contents,.reading-options{margin:0;min-width:0;border:1px solid var(--line);border-radius:7px;background:var(--panel);padding:0 12px}
+ .contents[open],.reading-options[open]{grid-column:1/-1}
+ .contents>summary,.reading-options>summary{min-height:46px;margin:0;padding:13px 0;font-size:12px;line-height:20px;letter-spacing:.4px;text-transform:none}
+ .toc{display:flex;gap:0;max-height:45vh;padding-bottom:10px}.toc a{display:flex;align-items:center;min-height:44px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+ .reading-options .tools{padding-bottom:14px}input{font-size:16px;min-height:46px}
+ button{min-width:46px;min-height:46px;font-size:15px}.settings{gap:10px}.settings #theme{flex:1}
+ #results a{min-height:44px;font-size:14px;padding:10px 0}
+ .legend{grid-column:1/-1;margin-top:3px;gap:12px;font-size:12px}
+ article h2{font-size:26px;margin-top:38px;padding-top:18px}article h3{font-size:22px}
+ .fact,.meaning,.open{padding:15px 16px}.dialogue{padding:13px 15px;border-left-width:3px}
+ .reference-images{gap:18px}.reference-images img{height:auto;max-height:70vh;object-fit:contain}.reference-images figcaption a{min-height:44px;display:inline-flex;align-items:center}
+ footer a{min-height:44px;display:inline-flex;align-items:center}
+}
+@media print{.reading-options{display:none}}
+
+.costume-gallery{margin-top:12px}.costume-gallery>summary{min-height:46px;padding:10px 0;font:14px/1.8 Segoe UI,Arial,sans-serif;cursor:pointer;color:var(--gold)}
+.reader-note{font:14px/1.7 Segoe UI,Arial,sans-serif;color:var(--muted);border-left:3px solid var(--line);padding:12px 16px;background:var(--panel)}

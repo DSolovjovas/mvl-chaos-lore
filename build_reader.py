@@ -40,17 +40,6 @@ def inline(text):
     return names.sub(colour_name, formatted)
 
 
-CHAPTERS = {
-    'Векса не помнила своего возраста.': '01 · Время без конца',
-    'Бар был знаком Вексе': '02 · Вода вместо коктейля',
-    'До той ночи Миу жила': '03 · Девушка за дверью',
-    'Утром они отправились': '04 · Тише воды',
-    'Готовить умела Луми:': '05 · Удивите меня',
-    'Вексе не требовался сон.': '06 · Поводы возвращаться',
-    'О странностях Вексы': '07 · Правда о Бруно',
-    'Позже разговор начала Миу.': '08 · Ещё по одному вопросу',
-    'Однажды Векса спокойно достала': '09 · Дом',
-}
 LABELS = {'vexa': 'Векса', 'miu': 'Миу', 'lumi': 'Луми', 'girls': 'Девушки'}
 
 
@@ -65,17 +54,11 @@ def render(text, lore=False, speakers=None):
         if in_list and not is_list:
             blocks.append('</ul>')
             in_list = False
-        if lore and line.startswith('#'):
+        if lore and line.startswith('# '):
             continue
         if lore and line.startswith(('Непубличный взрослый лор.', 'Взрослый лор.')):
             blocks.append('<details class="content-note"><summary>О содержании · 18+</summary><p>' + inline(line) + '</p></details>')
             continue
-        chapter = next((title for start, title in CHAPTERS.items() if lore and line.startswith(start)), None)
-        if chapter:
-            counter += 1
-            ident = f'section-{counter}'
-            toc.append((ident, chapter))
-            blocks.append(f'<h2 id="{ident}">{inline(chapter)}</h2>')
         if line.startswith('#'):
             level = min(len(line) - len(line.lstrip('#')), 4)
             title = line.lstrip('# ').strip()
@@ -132,8 +115,8 @@ def page(title, subtitle, active, body, toc):
 <title>{html.escape(title)} · MVL CHAOS</title><link rel="stylesheet" href="assets/reader.css"><script src="assets/reader.js" defer></script></head>
 <body><a class="skip" href="#reading">К тексту</a><div class="progress" aria-hidden="true"></div>
 <header class="top"><a class="brand" href="index.html">MVL<span>CHAOS</span></a><nav aria-label="Разделы">{nav}</nav><span class="private">Лор и персонажи · 18+</span></header>
-<div class="layout"><aside><details class="contents" open><summary>Содержание</summary><div class="toc">{links or '<a href="#reading">Персонажи</a>'}</div></details>
-<div class="tools"><label for="search">Найти в тексте</label><input id="search" type="search" placeholder="Слово или фраза" autocomplete="off"><p id="search-status" role="status"></p><div id="results"></div><div class="settings"><button id="smaller" aria-label="Уменьшить текст">A−</button><button id="larger" aria-label="Увеличить текст">A+</button><button id="theme" aria-label="Сменить тему">Светлая тема</button></div></div>
+<div class="layout"><aside><details class="contents"><summary>Содержание</summary><div class="toc">{links or '<a href="#reading">Персонажи</a>'}</div></details>
+<details class="reading-options"><summary>Поиск и вид</summary><div class="tools"><label for="search">Найти в тексте</label><input id="search" type="search" placeholder="Слово или фраза" autocomplete="off"><p id="search-status" role="status"></p><div id="results"></div><div class="settings"><button id="smaller" aria-label="Уменьшить текст">A−</button><button id="larger" aria-label="Увеличить текст">A+</button><button id="theme" aria-label="Сменить тему">Светлая тема</button></div></div></details>
 <div class="legend"><span class="miu">● Миу</span><span class="vexa">● Векса</span><span class="lumi">● Луми</span><span class="bruno">● Бруно</span></div></aside>
 <main id="reading" tabindex="-1"><header class="title"><p class="eyebrow">SAME GIRLS. DIFFERENT CHAOS.</p><h1>{html.escape(title)}</h1><p class="subtitle">{html.escape(subtitle)}</p></header><article>{body}</article><footer>Same Girls. Different Chaos. <span>Авторский мир и его истории</span><a href="#reading">Наверх ↑</a></footer></main></div></body></html>'''
 
@@ -154,6 +137,7 @@ def build():
     body, toc = render(story, True, speakers)
     write(OUT / 'index.html', page('История тех, кто остался', 'Три подруги, один пёс и дом, который постепенно стал их общим.', 'lore', body, toc))
     body, toc = render(canon, False, speakers)
+    body = '<details class="content-note"><summary>Справочник раскрывает сюжет</summary><p>Здесь собран полный канон, включая прошлое персонажей и исход событий. Для первого знакомства с миром начните с раздела «История».</p></details>' + body
     write(OUT / 'canon.html', page('Канон и устройство мира', 'Факты, их значение и вопросы, на которые мы ещё ищем ответы.', 'canon', body, toc))
     characters_path = OUT / 'content' / 'characters.json'
     cards, reference_toc = [], []
@@ -161,18 +145,20 @@ def build():
         for character in json.loads(characters_path.read_text(encoding='utf-8')):
             ident = 'character-' + character['id']
             reference_toc.append((ident, character['name']))
-            images = []
+            images, costume_images = [], []
             for image in character['images']:
                 label = image.get('purpose', 'Хэллоуинский образ') if image['role'].startswith('halloween') else ('Лицо / морда · главный источник сходства' if image['role'] == 'face' else 'Полный лист · анатомия и основной образ')
                 path = html.escape(image['path'], quote=True)
-                images.append(f'<figure><a href="{path}" target="_blank" rel="noopener"><img src="{path}" alt="{html.escape(character["name"])} — {html.escape(label)}" loading="lazy"></a><figcaption>{html.escape(label)}<br><a href="{path}" target="_blank" rel="noopener">Открыть оригинал ↗</a></figcaption></figure>')
+                image_list = costume_images if image['role'].startswith('halloween') else images
+                image_list.append(f'<figure><a href="{path}" target="_blank" rel="noopener"><img src="{path}" alt="{html.escape(character["name"])} — {html.escape(label)}" loading="lazy"></a><figcaption>{html.escape(label)}<br><a href="{path}" target="_blank" rel="noopener">Открыть оригинал ↗</a></figcaption></figure>')
+            costume_gallery = '<details class="costume-gallery"><summary>Показать костюмные референсы</summary><div class="reference-images">' + ''.join(costume_images) + '</div></details>' if costume_images else ''
             rules = ''.join('<li>' + inline(rule) + '</li>' for rule in character['rules'])
-            cards.append(f'<section class="character {character["colour"]}"><h2 id="{ident}">{inline(character["name"])}</h2><p class="profile-description">{inline(character["description"])}</p><div class="reference-images">{"".join(images)}</div><h3>Характер</h3><p>{inline(character["character"])}</p><h3>Мотив и роль в истории</h3><p>{inline(character["motive"])}</p><h3>Постоянные правила</h3><ul>{rules}</ul><div class="costume-note"><strong>Хэллоуинский образ</strong><p>{inline(character["halloween"])}</p></div></section>')
+            cards.append(f'<section class="character {character["colour"]}"><h2 id="{ident}">{inline(character["name"])}</h2><p class="profile-description">{inline(character["description"])}</p><div class="reference-images">{"".join(images)}</div><h3>Характер</h3><p>{inline(character["character"])}</p><h3>Мотив и роль в истории</h3><p>{inline(character["motive"])}</p><h3>Постоянные правила</h3><ul>{rules}</ul><div class="costume-note"><strong>Хэллоуинский образ</strong><p>{inline(character["halloween"])}</p>{costume_gallery}</div></section>')
     rules_text = (ROOT / 'Правила референсов.md').read_text(encoding='utf-8') if (ROOT / 'Правила референсов.md').exists() else ''
     rules_body, _ = render(rules_text, False, speakers)
     reference_toc.append(('reference-rules', 'Общие правила'))
-    write(OUT / 'references.html', page('Персонажи и референсы', 'Основные листы, лица, характеры, мотивы и правила визуальной непрерывности.', 'references', ''.join(cards) + '<h2 id="reference-rules">Общие правила использования</h2>' + rules_body, reference_toc))
-    print(json.dumps({'pages': 3, 'dialogue_lines': len(speakers), 'lore_chapters': len(CHAPTERS), 'output': str(OUT)}, ensure_ascii=True))
+    write(OUT / 'references.html', page('Персонажи и референсы', 'Основные листы, лица, характеры, мотивы и правила визуальной непрерывности.', 'references', '<p class="reader-note">Профили содержат сведения о прошлом персонажей и раскрывают сюжет.</p>' + ''.join(cards) + '<h2 id="reference-rules">Общие правила использования</h2>' + rules_body, reference_toc))
+    print(json.dumps({'pages': 3, 'dialogue_lines': len(speakers), 'lore_chapters': sum(line.startswith('## ') for line in story.splitlines()), 'output': str(OUT)}, ensure_ascii=True))
 
 
 if __name__ == '__main__':
