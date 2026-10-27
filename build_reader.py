@@ -108,7 +108,7 @@ def render(text, lore=False, speakers=None):
 
 def page(title, subtitle, active, body, toc):
     links = ''.join(f'<a href="#{ident}">{inline(label)}</a>' for ident, label in toc)
-    nav = ''.join(f'<a href="{url}" {"aria-current=\"page\"" if key == active else ""}>{label}</a>' for key, url, label in [('lore', 'index.html', 'История'), ('canon', 'canon.html', 'Канон и мир'), ('references', 'references.html', 'Референсы')])
+    nav = ''.join(f'<a href="{url}" {"aria-current=\"page\"" if key == active else ""}>{label}</a>' for key, url, label in [('lore', 'index.html', 'История'), ('canon', 'canon.html', 'Канон и мир'), ('references', 'references.html', 'Персонажи')])
     return f'''<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><meta name="color-scheme" content="dark light">
@@ -136,7 +136,8 @@ def build():
     speakers = json.loads(annotation.read_text(encoding='utf-8'))
     body, toc = render(story, True, speakers)
     write(OUT / 'index.html', page('История тех, кто остался', 'Три подруги, один пёс и дом, который постепенно стал их общим.', 'lore', body, toc))
-    body, toc = render(canon, False, speakers)
+    public_canon = canon.split('### Визуальная непрерывность', 1)[0].rstrip()
+    body, toc = render(public_canon, False, speakers)
     body = '<details class="content-note"><summary>Справочник раскрывает сюжет</summary><p>Здесь собран полный канон, включая прошлое персонажей и исход событий. Для первого знакомства с миром начните с раздела «История».</p></details>' + body
     write(OUT / 'canon.html', page('Канон и устройство мира', 'Факты, их значение и вопросы, на которые мы ещё ищем ответы.', 'canon', body, toc))
     characters_path = OUT / 'content' / 'characters.json'
@@ -145,19 +146,18 @@ def build():
         for character in json.loads(characters_path.read_text(encoding='utf-8')):
             ident = 'character-' + character['id']
             reference_toc.append((ident, character['name']))
-            images, costume_images = [], []
+            public = character['public']
+            images = []
             for image in character['images']:
-                label = image.get('purpose', 'Хэллоуинский образ') if image['role'].startswith('halloween') else ('Лицо / морда · главный источник сходства' if image['role'] == 'face' else 'Полный лист · анатомия и основной образ')
+                if not image.get('show_on_site', False):
+                    continue
+                label = 'Портрет' if image['role'] == 'face' else 'Основной образ'
                 path = html.escape(image['path'], quote=True)
-                image_list = costume_images if image['role'].startswith('halloween') else images
-                image_list.append(f'<figure><a href="{path}" target="_blank" rel="noopener"><img src="{path}" alt="{html.escape(character["name"])} — {html.escape(label)}" loading="lazy"></a><figcaption>{html.escape(label)}<br><a href="{path}" target="_blank" rel="noopener">Открыть оригинал ↗</a></figcaption></figure>')
-            costume_gallery = '<details class="costume-gallery"><summary>Показать костюмные референсы</summary><div class="reference-images">' + ''.join(costume_images) + '</div></details>' if costume_images else ''
-            rules = ''.join('<li>' + inline(rule) + '</li>' for rule in character['rules'])
-            cards.append(f'<section class="character {character["colour"]}"><h2 id="{ident}">{inline(character["name"])}</h2><p class="profile-description">{inline(character["description"])}</p><div class="reference-images">{"".join(images)}</div><h3>Характер</h3><p>{inline(character["character"])}</p><h3>Мотив и роль в истории</h3><p>{inline(character["motive"])}</p><h3>Постоянные правила</h3><ul>{rules}</ul><div class="costume-note"><strong>Хэллоуинский образ</strong><p>{inline(character["halloween"])}</p>{costume_gallery}</div></section>')
-    rules_text = (ROOT / 'Правила референсов.md').read_text(encoding='utf-8') if (ROOT / 'Правила референсов.md').exists() else ''
-    rules_body, _ = render(rules_text, False, speakers)
-    reference_toc.append(('reference-rules', 'Общие правила'))
-    write(OUT / 'references.html', page('Персонажи и референсы', 'Основные листы, лица, характеры, мотивы и правила визуальной непрерывности.', 'references', '<p class="reader-note">Профили содержат сведения о прошлом персонажей и раскрывают сюжет.</p>' + ''.join(cards) + '<h2 id="reference-rules">Общие правила использования</h2>' + rules_body, reference_toc))
+                images.append(f'<figure><a href="{path}" target="_blank" rel="noopener"><img src="{path}" alt="{html.escape(character["name"])} — {label}" loading="lazy"></a><figcaption>{label}<br><a href="{path}" target="_blank" rel="noopener">Рассмотреть изображение ↗</a></figcaption></figure>')
+            cards.append(f'<section class="character {character["colour"]}"><h2 id="{ident}">{inline(character["name"])}</h2><p>{inline(public["description"])}</p><div class="reference-images">{"".join(images)}</div><h3>Характер</h3><p>{inline(public["character"])}</p><h3>Что для них важно</h3><p>{inline(public["motive"])}</p></section>')
+    reference_toc.append(('future-looks', 'Другие образы'))
+    upcoming = '<h2 id="future-looks">Другие образы</h2><p>Для персонажей подготовлены хэллоуинские костюмы. Они появятся здесь после их показа в истории.</p>'
+    write(OUT / 'references.html', page('Персонажи', 'Миу, Векса, Луми и Бруно: внешность, характеры и то, что их объединяет.', 'references', ''.join(cards) + upcoming, reference_toc))
     print(json.dumps({'pages': 3, 'dialogue_lines': len(speakers), 'lore_chapters': sum(line.startswith('## ') for line in story.splitlines()), 'output': str(OUT)}, ensure_ascii=True))
 
 
