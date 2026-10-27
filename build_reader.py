@@ -19,6 +19,8 @@ STORY_ILLUSTRATIONS = {
     'flour-apology.png': ROOT / 'Иллюстрации' / '07_Мука' / 'flour-apology-v2.png',
     'accident-aftermath.png': ROOT / 'Иллюстрации' / '08_Авария' / 'accident-aftermath-v4.png',
     'driver-death.png': ROOT / 'Иллюстрации' / '09_Водитель' / 'driver-death-v4.png',
+    'first-meeting-bruno.png': ROOT / 'Иллюстрации' / '10_Переулок' / 'first-meeting-bruno-v1.png',
+    'camera-gift.png': ROOT / 'Иллюстрации' / '11_Фотоаппарат' / 'camera-gift-v1.png',
 }
 
 
