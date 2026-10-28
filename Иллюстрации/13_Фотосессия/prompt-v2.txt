@@ -1,0 +1,5 @@
+Use case: illustration-story.
+Asset type: cinematic MVL CHAOS lore illustration for a reader website.
+Scene: Lumi photographs Miu during an improvised photo session. Miu poses on a bed while many already-made printed photographs are scattered beside her. Preserve their established faces, feline ears, tails and color identities. No human ears and no piercings.
+
+The selected image originated from the first generated composition. A later attempt to remove noncanonical legwear from this exact composition was rejected by the image safety filter, so the original selected frame is preserved unchanged.

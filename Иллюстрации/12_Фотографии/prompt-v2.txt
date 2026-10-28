@@ -1,0 +1,5 @@
+Use case: precise-object-edit.
+Asset type: MVL CHAOS story illustration correction.
+Input images: Image 1 is the edit target and must remain the exact composition; Images 2 and 3 are Lumi identity and anatomy references; Image 4 is Bruno's identity reference.
+Primary request: Change only Lumi's ears in Image 1. Remove and fully conceal both human ears from the sides of Lumi's head. The sides of her head must be anatomically smooth and naturally covered by her platinum-blonde hair. Lumi has exactly two cream-white feline ears on top of her head, matching her hair and the references. No human ears may be visible.
+Constraints: Preserve everything else as closely and exactly as possible: same crop, composition, photographic style, Lumi's adult face and identity, expression, hair, body, clothing, kneeling pose, hands, camera, tail, Bruno's identity and pose, frosty garden, mansion background, lighting, colors, depth of field, and all object placement. No piercings on any character. Do not add or remove any other element. No text, no watermark.

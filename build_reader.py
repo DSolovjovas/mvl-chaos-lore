@@ -21,6 +21,10 @@ STORY_ILLUSTRATIONS = {
     'driver-death.jpg': ROOT / 'Иллюстрации' / '09_Водитель' / 'driver-death-v4.jpg',
     'first-meeting-bruno.jpg': ROOT / 'Иллюстрации' / '10_Переулок' / 'first-meeting-bruno-v1.jpg',
     'camera-gift.jpg': ROOT / 'Иллюстрации' / '11_Фотоаппарат' / 'camera-gift-v1.jpg',
+    'lumi-photographs.jpg': ROOT / 'Иллюстрации' / '12_Фотографии' / 'lumi-photographs-bruno-v2.jpg',
+    'miu-photoshoot.jpg': ROOT / 'Иллюстрации' / '13_Фотосессия' / 'miu-photoshoot-v2-bed.jpg',
+    'miu-guitar.jpg': ROOT / 'Иллюстрации' / '14_Гитара' / 'miu-singing-lumi-listens-v1.jpg',
+    'lumi-police.jpg': ROOT / 'Иллюстрации' / '15_Полиция' / 'lumi-surrenders-with-friends-v1.jpg',
 }
 
 
