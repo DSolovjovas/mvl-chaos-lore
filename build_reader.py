@@ -25,6 +25,13 @@ STORY_ILLUSTRATIONS = {
     'miu-photoshoot.jpg': ROOT / 'Иллюстрации' / '13_Фотосессия' / 'miu-photoshoot-v2-bed.jpg',
     'miu-guitar.jpg': ROOT / 'Иллюстрации' / '14_Гитара' / 'miu-singing-lumi-listens-v1.jpg',
     'lumi-police.jpg': ROOT / 'Иллюстрации' / '15_Полиция' / 'lumi-surrenders-with-friends-v1.jpg',
+    'fifty-years-dinner.jpg': ROOT / 'Иллюстрации' / '16_Ужин' / 'fifty-years-dinner-v1.jpg',
+    'vexa-donation.jpg': ROOT / 'Иллюстрации' / '17_Донорство' / 'vexa-blood-donation-v1.jpg',
+    'bruno-trust.jpg': ROOT / 'Иллюстрации' / '18_Доверие_Бруно' / 'bruno-approaches-miu-v2.jpg',
+    'first-blood-bag.jpg': ROOT / 'Иллюстрации' / '19_Пакет_крови' / 'first-blood-bag-v2.jpg',
+    'lumi-unpacks.jpg': ROOT / 'Иллюстрации' / '21_Первый_предмет_в_шкафу' / 'lumi-unpacks-first-item-v2.jpg',
+    'first-avocado-dish.jpg': ROOT / 'Иллюстрации' / '25_Первое_авокадо' / 'vexa-first-avocado-dish-v1.jpg',
+    'bruno-corner.jpg': ROOT / 'Иллюстрации' / '26_Уголок_Бруно' / 'bruno-corner-v1.jpg',
 }
 
 
