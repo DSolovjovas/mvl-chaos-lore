@@ -32,6 +32,8 @@ STORY_ILLUSTRATIONS = {
     'lumi-unpacks.jpg': ROOT / 'Иллюстрации' / '21_Первый_предмет_в_шкафу' / 'lumi-unpacks-first-item-v2.jpg',
     'first-avocado-dish.jpg': ROOT / 'Иллюстрации' / '25_Первое_авокадо' / 'vexa-first-avocado-dish-v1.jpg',
     'bruno-corner.jpg': ROOT / 'Иллюстрации' / '26_Уголок_Бруно' / 'bruno-corner-v1.jpg',
+    'return-scars-diagram.jpg': ROOT / 'Иллюстрации' / '27_Схемы_мира' / 'miu-lumi-return-scars-v5.jpg',
+    'hundred-year-cycle.jpg': ROOT / 'Иллюстрации' / '27_Схемы_мира' / 'hundred-year-cycle-v2.jpg',
 }
 
 
