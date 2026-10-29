@@ -12,6 +12,7 @@ def export():
     files = [OUT / name for name in ('index.html', 'canon.html', 'references.html')]
     files += list((OUT / 'assets').glob('*.css'))
     files += list((OUT / 'assets').glob('*.js'))
+    files += list((OUT / 'assets').glob('*.svg'))
     files += list((OUT / 'illustrations').glob('*.jpg'))
     profiles = json.loads((OUT / 'content' / 'characters.json').read_text(encoding='utf-8'))
     files += [OUT / image['path'] for character in profiles for image in character['images'] if image.get('show_on_site', False)]

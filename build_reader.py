@@ -110,7 +110,7 @@ def render(text, lore=False, speakers=None):
             alt, path = image_match.groups()
             safe_alt = html.escape(alt, quote=True)
             safe_path = html.escape(path, quote=True)
-            blocks.append(f'<figure class="story-illustration"><a href="{safe_path}" target="_blank" rel="noopener"><img src="{safe_path}" alt="{safe_alt}" loading="lazy"></a><figcaption>{safe_alt}</figcaption></figure>')
+            blocks.append(f'<figure class="story-illustration"><a href="{safe_path}" data-lightbox data-caption="{safe_alt}"><img src="{safe_path}" alt="{safe_alt}" loading="lazy"></a><figcaption>{safe_alt}</figcaption></figure>')
             continue
         if line.startswith('#'):
             level = min(len(line) - len(line.lstrip('#')), 4)
@@ -159,19 +159,35 @@ def render(text, lore=False, speakers=None):
     return '\n'.join(blocks), toc
 
 
-def page(title, subtitle, active, body, toc):
+def page(title, subtitle, active, body, toc, landing=False):
     links = ''.join(f'<a href="#{ident}">{inline(label)}</a>' for ident, label in toc)
     nav = ''.join(f'<a href="{url}" {"aria-current=\"page\"" if key == active else ""}>{label}</a>' for key, url, label in [('lore', 'index.html', 'История'), ('canon', 'canon.html', 'Канон и мир'), ('references', 'references.html', 'Персонажи')])
+    site_url = 'https://dsolovjovas.github.io/mvl-chaos-lore/'
+    page_url = site_url + {'lore': '', 'canon': 'canon.html', 'references': 'references.html'}[active]
+    description = subtitle if active != 'lore' else 'Три подруги и пёс учатся превращать холодный особняк бессмертной вампирши Вексы в общий дом.'
+    social_image = site_url + 'illustrations/fifty-years-dinner.jpg'
+    title_block = f'<header class="title"><p class="eyebrow">SAME GIRLS. DIFFERENT CHAOS.</p><h1>{html.escape(title)}</h1><p class="subtitle">{html.escape(subtitle)}</p></header>'
+    if landing:
+        title_block = '''<section class="story-hero" aria-labelledby="story-title">
+<div class="hero-copy"><p class="eyebrow">SAME GIRLS. DIFFERENT CHAOS.</p><p class="age-mark">Авторская история · 18+</p><h1 id="story-title">История тех, кто остался</h1><p class="hero-lead">Три подруги и пёс учатся превращать холодный особняк бессмертной вампирши Вексы в общий дом.</p><p class="hero-intro">Миу заменила алкоголь в коктейле странной посетительницы водой. Векса почувствовала кровь ещё за закрытой дверью. А Луми вошла в бар, не понимая, куда ей теперь идти.</p><div class="hero-actions"><a class="primary-action" href="#section-1">Начать читать</a><a class="secondary-action" href="references.html">Познакомиться с персонажами</a></div></div>
+<figure class="hero-cover"><img src="illustrations/fifty-years-dinner.jpg" alt="Миу, Луми, Векса и Бруно вместе в особняке"><figcaption>Same Girls. Different Chaos.</figcaption></figure></section>
+<aside class="audience-warning" aria-label="Предупреждение о содержании"><strong>18+</strong><span>История затрагивает семейное насилие, сексуальную эксплуатацию, убийства и последствия травмы. Графические подробности не являются её целью.</span></aside>'''
+    about = ''
+    if active == 'lore':
+        about = '''<section class="about-project" aria-labelledby="about-title"><p class="eyebrow">О ПРОЕКТЕ</p><h2 id="about-title">Мир о памяти, выборе и найденной семье</h2><p>MVL CHAOS — авторская история о существах, которым досталось слишком много времени и слишком мало безопасности. Здесь тёмное прошлое не исчезает, но перестаёт быть единственным, что определяет героев.</p><a href="canon.html">Изучить устройство мира →</a></section>'''
     return f'''<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow"><meta name="color-scheme" content="dark light">
-<title>{html.escape(title)} · MVL CHAOS</title><link rel="stylesheet" href="assets/reader.css"><script src="assets/reader.js" defer></script></head>
+<meta name="robots" content="index,follow"><meta name="color-scheme" content="dark light"><meta name="theme-color" content="#151618">
+<meta name="description" content="{html.escape(description, quote=True)}"><link rel="canonical" href="{page_url}">
+<meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:site_name" content="MVL CHAOS"><meta property="og:title" content="{html.escape(title, quote=True)} · MVL CHAOS"><meta property="og:description" content="{html.escape(description, quote=True)}"><meta property="og:url" content="{page_url}"><meta property="og:image" content="{social_image}">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{html.escape(title, quote=True)} · MVL CHAOS"><meta name="twitter:description" content="{html.escape(description, quote=True)}"><meta name="twitter:image" content="{social_image}">
+<title>{html.escape(title)} · MVL CHAOS</title><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="assets/reader.css"><script src="assets/reader.js" defer></script></head>
 <body><a class="skip" href="#reading">К тексту</a><div class="progress" aria-hidden="true"></div>
-<header class="top"><a class="brand" href="index.html">MVL<span>CHAOS</span></a><nav aria-label="Разделы">{nav}</nav><span class="private">Лор и персонажи · 18+</span></header>
+<header class="top"><a class="brand" href="index.html">MVL<span>CHAOS</span></a><nav aria-label="Разделы">{nav}</nav><button class="share-button" id="share" type="button" aria-label="Поделиться этой страницей">Поделиться</button><span class="private">Авторская история · 18+</span></header>
 <div class="layout"><aside><details class="contents"><summary>Содержание</summary><div class="toc">{links or '<a href="#reading">Персонажи</a>'}</div></details>
 <details class="reading-options"><summary>Поиск и вид</summary><div class="tools"><label for="search">Найти в тексте</label><input id="search" type="search" placeholder="Слово или фраза" autocomplete="off"><p id="search-status" role="status"></p><div id="results"></div><div class="settings"><button id="smaller" aria-label="Уменьшить текст">A−</button><button id="larger" aria-label="Увеличить текст">A+</button><button id="theme" aria-label="Сменить тему">Светлая тема</button></div></div></details>
 <div class="legend"><span class="miu">● Миу</span><span class="vexa">● Векса</span><span class="lumi">● Луми</span><span class="bruno">● Бруно</span></div></aside>
-<main id="reading" tabindex="-1"><header class="title"><p class="eyebrow">SAME GIRLS. DIFFERENT CHAOS.</p><h1>{html.escape(title)}</h1><p class="subtitle">{html.escape(subtitle)}</p></header><article>{body}</article><footer>Same Girls. Different Chaos. <span>Авторский мир и его истории</span><a href="#reading">Наверх ↑</a></footer></main></div></body></html>'''
+<main id="reading" tabindex="-1">{title_block}<article>{body}</article>{about}<footer>Same Girls. Different Chaos. <span>Авторский мир и его истории</span><a href="#reading">Наверх ↑</a></footer></main></div><dialog class="image-viewer" id="image-viewer" aria-label="Просмотр изображения"><button class="viewer-close" type="button" aria-label="Закрыть изображение">×</button><img id="viewer-image" alt=""><p id="viewer-caption"></p></dialog></body></html>'''
 
 
 def build():
@@ -190,7 +206,7 @@ def build():
         write(annotation, json.dumps([{'text': text, 'speaker': role} for text, role in zip(lines, roles)], ensure_ascii=False, indent=2) + '\n')
     speakers = json.loads(annotation.read_text(encoding='utf-8'))
     body, toc = render(story, True, speakers)
-    write(OUT / 'index.html', page('История тех, кто остался', 'Три подруги, один пёс и дом, который постепенно стал их общим.', 'lore', body, toc))
+    write(OUT / 'index.html', page('История тех, кто остался', 'Три подруги, один пёс и дом, который постепенно стал их общим.', 'lore', body, toc, landing=True))
     public_canon = canon.split('### Визуальная непрерывность', 1)[0].rstrip()
     body, toc = render(public_canon, False, speakers)
     body = '<details class="content-note"><summary>Справочник раскрывает сюжет</summary><p>Здесь собран полный канон, включая прошлое персонажей и исход событий. Для первого знакомства с миром начните с раздела «История».</p></details>' + body
@@ -204,11 +220,12 @@ def build():
             public = character['public']
             images = []
             for image in character['images']:
-                if not image.get('show_on_site', False):
+                if image['role'] != 'face' or not image.get('show_on_site', False):
                     continue
-                label = 'Портрет' if image['role'] == 'face' else 'Основной образ'
+                label = 'Портрет'
                 path = html.escape(image['path'], quote=True)
-                images.append(f'<figure><a href="{path}" target="_blank" rel="noopener"><img src="{path}" alt="{html.escape(character["name"])} — {label}" loading="lazy"></a><figcaption>{label}<br><a href="{path}" target="_blank" rel="noopener">Рассмотреть изображение ↗</a></figcaption></figure>')
+                image_alt = f'{html.escape(character["name"])} — {label}'
+                images.append(f'<figure><a href="{path}" data-lightbox data-caption="{image_alt}"><img src="{path}" alt="{image_alt}" loading="lazy"></a><figcaption>{label}<br><a href="{path}" data-lightbox data-caption="{image_alt}">Рассмотреть изображение</a></figcaption></figure>')
             cards.append(f'<section class="character {character["colour"]}"><h2 id="{ident}">{inline(character["name"])}</h2><p>{inline(public["description"])}</p><div class="reference-images">{"".join(images)}</div><h3>Характер</h3><p>{inline(public["character"])}</p><h3>Что для них важно</h3><p>{inline(public["motive"])}</p></section>')
     reference_toc.append(('future-looks', 'Другие образы'))
     upcoming = '<h2 id="future-looks">Другие образы</h2><p>Для персонажей подготовлены хэллоуинские костюмы. Они появятся здесь после их показа в истории.</p>'

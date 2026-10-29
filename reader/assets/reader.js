@@ -1,6 +1,7 @@
 (() => {
   const body = document.body;
   const theme = document.querySelector('#theme');
+  const share = document.querySelector('#share');
   const narrowScreen = matchMedia('(max-width: 720px)');
   const panels = [...document.querySelectorAll('.contents, .reading-options')];
   function updatePanels() { panels.forEach(panel => { panel.open = !narrowScreen.matches; }); }
@@ -30,6 +31,41 @@
   document.querySelector('#smaller').addEventListener('click', () => { size = Math.max(16, size - 1); applySettings(); });
   document.querySelector('#larger').addEventListener('click', () => { size = Math.min(26, size + 1); applySettings(); });
   applySettings();
+  share?.addEventListener('click', async () => {
+    const payload = { title: document.title, text: document.querySelector('meta[name="description"]')?.content || '', url: location.href };
+    try {
+      if (navigator.share) {
+        await navigator.share(payload);
+        return;
+      }
+      await navigator.clipboard.writeText(location.href);
+      const original = share.textContent;
+      share.textContent = 'Ссылка скопирована';
+      setTimeout(() => { share.textContent = original; }, 1800);
+    } catch (error) {
+      if (error?.name !== 'AbortError') share.textContent = 'Скопируйте адрес страницы';
+    }
+  });
+  const viewer = document.querySelector('#image-viewer');
+  const viewerImage = document.querySelector('#viewer-image');
+  const viewerCaption = document.querySelector('#viewer-caption');
+  const viewerClose = document.querySelector('.viewer-close');
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[data-lightbox]');
+    if (!link || !viewer) return;
+    event.preventDefault();
+    viewerImage.src = link.href;
+    viewerImage.alt = link.dataset.caption || link.querySelector('img')?.alt || '';
+    viewerCaption.textContent = link.dataset.caption || viewerImage.alt;
+    viewer.showModal();
+  });
+  viewerClose?.addEventListener('click', () => viewer.close());
+  viewer?.addEventListener('click', event => {
+    if (event.target === viewer) viewer.close();
+  });
+  viewer?.addEventListener('close', () => {
+    viewerImage.removeAttribute('src');
+  });
   const paragraphs = [...document.querySelectorAll('article p, article li, article h2, article h3')];
   paragraphs.forEach((element, i) => { if (!element.id) element.id = `paragraph-${i}`; });
   const search = document.querySelector('#search');

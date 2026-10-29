@@ -24,7 +24,7 @@
         "source": "Miu/База/Референсы/MIU_original_reference.png",
         "status": "Закреплённый локальный референс; текущие текстовые уточнения имеют приоритет.",
         "purpose": "Анатомия, пропорции, основной образ",
-        "show_on_site": true
+        "show_on_site": false
       },
       {
         "role": "face",
@@ -95,7 +95,7 @@
         "source": "Vexa/База/Референсы/VEXA_original_reference.png",
         "status": "Закреплённый локальный референс; текущие текстовые уточнения имеют приоритет.",
         "purpose": "Анатомия, пропорции, основной образ",
-        "show_on_site": true
+        "show_on_site": false
       },
       {
         "role": "face",
@@ -159,7 +159,7 @@
         "source": "Lumi/База/Референсы/LUMI_original_reference.png",
         "status": "Закреплённый локальный референс; текущие текстовые уточнения имеют приоритет.",
         "purpose": "Анатомия, пропорции, основной образ",
-        "show_on_site": true
+        "show_on_site": false
       },
       {
         "role": "face",
@@ -230,7 +230,7 @@
         "source": "Bruno/База/Референсы/BRUNO_visual_reference.png",
         "status": "Закреплённый локальный референс; текущие текстовые уточнения имеют приоритет.",
         "purpose": "Анатомия, пропорции, основной образ",
-        "show_on_site": true
+        "show_on_site": false
       },
       {
         "role": "face",
